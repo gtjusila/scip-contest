@@ -10,7 +10,11 @@ from pyscipopt import Model, SCIP_PARAMSETTING, SCIP_RESULT
 def run_script(script_name, timeout_sec, timeout_status, runtime_status):
     full_path = os.path.join("/mnt/user-code", script_name)
     if not os.path.isfile(full_path):
-        print(f"[EVALUATE] {script_name} not found, skipping.")
+        if script_name == "initialize.sh":
+            print(f"[EVALUATE] {script_name} not found, skipping.")
+        else:
+            print(f"[EVALUATE] {script_name} not found, cannot proceed. Terminating.")
+        
         return {"status": "ScriptNotFound"}
 
     try:
@@ -77,7 +81,7 @@ def evaluate_model(testcase_path):
 
     return {
         "termination_status": str(status),
-        "gap_closed": gap,
+        "final_gap": gap,
         "solve_time": solve_time
     }
 
